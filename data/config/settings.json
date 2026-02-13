@@ -1,0 +1,44 @@
+{
+	
+	"plugins":{
+
+	},
+	"ruleCommandPackages":[
+		"neon.tll.data.scripts.rulecmd",
+		"neon.tll.data.scripts.rulecmd.util"
+	],
+	
+	"designTypeColors":{
+		"Tellasian League":[111,137,149,255],
+	},
+
+
+	# Bonus XP values for most story-point-using actions
+	"bonusXP":{
+	},
+
+    "graphics":{	
+        "ui":{
+        },
+	"glows":{
+        },		
+        "shields":{
+        },
+		"blueprint_packages":{
+			"tll_base_bp":"graphics/icons/cargo/tll_base_bp.png",
+		},
+		
+		"abilities":{
+		},
+		
+		"SUPERDERELICT":{
+	
+		},
+
+		"characters":{
+		},
+        "fx":{
+ 
+        },
+    }
+},

@@ -1,0 +1,75 @@
+{
+	"combatCapital":{
+                "tll_legion_standard":4,
+                "tll_nova_standard":3,
+                "tll_conquest_standard":2,
+                "tll_peregrine_standard":2,
+                "tll_nest_standard":4,
+                "tll_nest_assault":3,
+		
+ 
+	},
+	
+	
+	# hybrid ships with good combat and cargo capacity
+	"combatFreighterSmall":{
+	},
+	"combatFreighterLarge":{
+    },
+	"combatFreighterMedium":{
+	},	
+	"freighterLarge":{
+                "tll_rampart_standard":5,
+	},
+"freighterSmall":{
+		
+		"tll_buffalo_standard":10,
+                "tll_berserker_standard":5,
+	},
+"freighterMedium":{
+		"tll_colossus_standard":10,
+	},
+
+
+    "tug":{
+
+	},
+    "combatMedium":{
+                "tll_elucidation_standard":0.1,
+                "tll_medusa_standard":6,
+                "tll_harbinger_standard":4,
+                "tll_sunder_standard":5,
+                "tll_fulgent_standard":5,
+           
+    },
+    "combatLarge":{
+                   "tll_apex_standard":4,
+                   "tll_eagle_standard":5,
+                   "tll_falcon_standard":6,
+                   "tll_dominator_standard":5,
+                   "tll_champion_standard":4,
+                   "tll_medusa_standard":6,
+                   "tll_harbinger_standard":4,
+                   "tll_sunder_standard":5,
+                   "tll_fulgent_standard":5,
+                   "tll_anubis_standard":3,
+                   "tll_scintilla_standard":3,
+                   "tll_gemini_standard":4,
+                   "tll_elucidation_standard":3,
+             
+               
+    },
+    "combatSmall":{
+        
+	               "tll_lumen_standard":10,
+                   "tll_glimmer_standard":5,
+                   "tll_shade_standard":3,
+                   "tll_brawler_standard":3,
+    },
+	"carrierMedium":{
+                 "tll_drover_standard":5,
+                "tll_scintilla_standard":5,
+                "tll_heron_standard":5,},
+      },
+	
+}

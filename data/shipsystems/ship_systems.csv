@@ -1,0 +1,2 @@
+name,id,flux/second,f/s (base rate),f/s (base cap),flux/use,f/u (base rate),f/u (base cap),cr/u,max uses,regen,charge up,active,down,cooldown,toggle,noDissipation,noHardDissipation,hardFlux,noFiring,noTurning,noStrafing,noAccel,noShield,noVent,isPhaseCloak,tags,icon
+Plasma Overdrive,plasmaoverdrive,1,,,,,,,3,0.05,0.25,3.5,1,,,,,,,,,,,,,offensive,graphics/icons/hullsys/high_energy_focus.png
