@@ -3,7 +3,7 @@
 	"name":"Tellasian League", # displayed to the player
 	"author":"Xxarra",
 	"jars":["jars/TLL.jar"],
-	"version":"3.0.5.9",
+	"version":"1.0",
 	"description":"An ai-led isolationist faction in the top left of the sector.",
 	"gameVersion":"0.98a-RC5",
         "dependencies": [
