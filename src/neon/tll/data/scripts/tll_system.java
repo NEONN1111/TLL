@@ -2,6 +2,8 @@ package neon.tll.data.scripts;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
+import com.fs.starfarer.api.campaign.econ.EconomyAPI;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.impl.campaign.procgen.DefenderDataOverride;
 import com.fs.starfarer.api.impl.campaign.terrain.HyperspaceTerrainPlugin;
@@ -15,64 +17,63 @@ import java.awt.*;
 
 public class tll_system implements SectorGeneratorPlugin {
 	public static String NOT_RANDOM_MISSION_TARGET = "$not_random_mission_target";
+
 	@Override
 	public void generate(SectorAPI sector) {
-		Vector2f location  = new Vector2f(-29697,13959);
+		Vector2f location = new Vector2f(-29697, 13959);
 
 		StarSystemAPI system = Global.getSector().createStarSystem("Alphard");
 		system.setName("Alphard");
 		system.getLocation().set(location);
 		system.initNonStarCenter();
 		system.generateAnchorIfNeeded();
-	    system.addTag(Tags.THEME_REMNANT);
+		system.addTag(Tags.THEME_REMNANT);
 		system.addTag(Tags.THEME_HIDDEN);
 		system.addTag(Tags.THEME_SPECIAL);
 
-
 		system.setBackgroundTextureFilename("graphics/backgrounds/background5.jpg");
 
-		//In the Abyss
-
-
+		// Clear nebula
 		HyperspaceTerrainPlugin hyperTerrain = (HyperspaceTerrainPlugin) Misc.getHyperspaceTerrain().getPlugin();
 		NebulaEditor editor = new NebulaEditor(hyperTerrain);
 		editor.clearArc(system.getLocation().x, system.getLocation().y, 0, 200, 0, 360f);
 
-		//Vigil Star
-		PlanetAPI alphard = system.initStar("tll_alphard", // unique id for this star
-				"star_blue_supergiant", // id in planets.json
-				1500f, 		  // radius (in pixels at default zoom)
-				700, // corona
-				10f, // solar wind burn level
-				0.7f, // flare probability
-				3.0f); // CR loss multiplier, good values are in the range of 1-5
+		// Star
+		PlanetAPI alphard = system.initStar("tll_alphard",
+				"star_blue_supergiant",
+				1500f,
+				700,
+				10f,
+				0.7f,
+				3.0f);
 
 		system.setLightColor(new Color(20, 190, 200));
 		system.getLocation().set(location);
-		//Maddie Fractal World
 
-		system.addAsteroidBelt(alphard, 300, 20000, 1000, 160, 220); // Ring system located between inner and outer planets
+		// Asteroid belts
+		system.addAsteroidBelt(alphard, 300, 20000, 1000, 160, 220);
 		system.addRingBand(alphard, "misc", "rings_asteroids0", 256f, 1, Color.white, 256f, 19000, 200f, null, null);
 		system.addRingBand(alphard, "misc", "rings_dust0", 256f, 1, Color.white, 256f, 19000, 200f, null, null);
+
+		// Pyyrhus (Gas Giant with colony)
 		PlanetAPI pyyhrus = system.addPlanet("tll_pyyrhus", alphard, "Pyyrhus", "gas_giant", 50, 300, 9000, 400);
 		pyyhrus.setCustomDescriptionId("tll_pyyhrus");
-		pyyhrus.getMarket().addCondition(Conditions.HIGH_GRAVITY);
-		pyyhrus.getMarket().addCondition(Conditions.VOLATILES_PLENTIFUL);
-		pyyhrus.getMarket().addCondition(Conditions.DENSE_ATMOSPHERE);
-		pyyhrus.getMarket().addCondition(Conditions.EXTREME_WEATHER);
-		pyyhrus.getMarket().addCondition(Conditions.HIGH_GRAVITY);
-		pyyhrus.getMarket().addCondition(Conditions.POPULATION_5);
-		pyyhrus.getMarket().getMemoryWithoutUpdate().set(NOT_RANDOM_MISSION_TARGET, true);
+		pyyhrus.setFaction("tll");
+		pyyhrus.getMemoryWithoutUpdate().set(NOT_RANDOM_MISSION_TARGET, true);
 		pyyhrus.getMemoryWithoutUpdate().set("$tll_pyyrhustag", true);
-		pyyhrus.getMarket().setFactionId("tll");
+
+		// Prevent random admin from being assigned
+		pyyhrus.getMemoryWithoutUpdate().set("$no_automatic_admin", true);
+
+		// Magnetic field for Pyyrhus
 		SectorEntityToken field = system.addTerrain(Terrain.MAGNETIC_FIELD,
-				new MagneticFieldTerrainPlugin.MagneticFieldParams(150f, // terrain effect band width
-						320, // terrain effect middle radius
-						pyyhrus, // entity that it's around
-						309f, // visual band start
-						710f, // visual band end
-						new Color(130, 60, 150, 130), // base color
-						4f, // probability to spawn aurora sequence, checked once/day when no aurora in progress
+				new MagneticFieldTerrainPlugin.MagneticFieldParams(150f,
+						320,
+						pyyhrus,
+						309f,
+						710f,
+						new Color(130, 60, 150, 130),
+						4f,
 						new Color(130, 60, 150, 130),
 						new Color(150, 30, 120, 150),
 						new Color(10, 190, 200, 190),
@@ -82,27 +83,58 @@ public class tll_system implements SectorGeneratorPlugin {
 						new Color(100, 200, 200, 240)));
 		field.setCircularOrbit(pyyhrus, 0, 0, 75);
 
+		// Create market for Pyyrhus
+		MarketAPI pyyhrusMarket = Global.getFactory().createMarket("tll_pyyrhus", pyyhrus.getName(), 4);
+		pyyhrusMarket.setFactionId("tll");
+		pyyhrusMarket.setPrimaryEntity(pyyhrus);
+		pyyhrusMarket.setSurveyLevel(MarketAPI.SurveyLevel.FULL);
+		pyyhrusMarket.getTariff().modifyFlat("generator", 0.3f);
 
+		// Add conditions
+		pyyhrusMarket.setPlanetConditionMarketOnly(false);
+		pyyhrusMarket.addCondition(Conditions.POPULATION_4);
+		pyyhrusMarket.addCondition(Conditions.HIGH_GRAVITY);
+		pyyhrusMarket.addCondition(Conditions.DENSE_ATMOSPHERE);
+		pyyhrusMarket.addCondition(Conditions.EXTREME_WEATHER);
+		pyyhrusMarket.addCondition(Conditions.VOLATILES_DIFFUSE);
+
+		// Add industries
+		pyyhrusMarket.addIndustry(Industries.POPULATION);
+		pyyhrusMarket.addIndustry(Industries.FUELPROD);
+		pyyhrusMarket.addIndustry(Industries.MINING);
+		pyyhrusMarket.addIndustry(Industries.SPACEPORT);
+
+		pyyhrusMarket.getIndustry(Industries.SPACEPORT).setAICoreId(Commodities.BETA_CORE);
+		pyyhrusMarket.getIndustry(Industries.POPULATION).setAICoreId(Commodities.ALPHA_CORE);
+		pyyhrusMarket.getIndustry(Industries.FUELPROD).setAICoreId(Commodities.BETA_CORE);
+		// Add submarkets
+		pyyhrusMarket.addSubmarket(Submarkets.SUBMARKET_OPEN);
+		pyyhrusMarket.addSubmarket(Submarkets.GENERIC_MILITARY);
+		pyyhrusMarket.addSubmarket(Submarkets.SUBMARKET_BLACK);
+		pyyhrusMarket.addSubmarket(Submarkets.SUBMARKET_STORAGE);
+
+		pyyhrus.setMarket(pyyhrusMarket);
+		Global.getSector().getEconomy().addMarket(pyyhrusMarket, true);
+
+		// Vokha (Moon of Pyyrhus with colony)
 		PlanetAPI vokha = system.addPlanet("tll_vokha", pyyhrus, "Vokha", "barren-desert", 50, 60, 720, 90);
 		vokha.setCustomDescriptionId("tll_vokha");
-		vokha.getMarket().addCondition(Conditions.THIN_ATMOSPHERE);
-		vokha.getMarket().addCondition(Conditions.HOT);
-		vokha.getMarket().addCondition(Conditions.DARK);
-		vokha.getMarket().addCondition(Conditions.RUINS_SCATTERED);
-		vokha.getMarket().addCondition(Conditions.RARE_ORE_SPARSE);
-		vokha.getMarket().addCondition(Conditions.ORE_MODERATE);
-		vokha.getMarket().addCondition(Conditions.POPULATION_5);
-		vokha.getMarket().getMemoryWithoutUpdate().set(NOT_RANDOM_MISSION_TARGET, true);
+		vokha.setFaction("tll");
+		vokha.getMemoryWithoutUpdate().set(NOT_RANDOM_MISSION_TARGET, true);
 		vokha.getMemoryWithoutUpdate().set("$tll_vokhatag", true);
-		vokha.getMarket().setFactionId("tll");
+
+		// Prevent random admin from being assigned
+		vokha.getMemoryWithoutUpdate().set("$no_automatic_admin", true);
+
+		// Magnetic field for Vokha
 		SectorEntityToken field2 = system.addTerrain(Terrain.MAGNETIC_FIELD,
-				new MagneticFieldTerrainPlugin.MagneticFieldParams(150f, // terrain effect band width
-						320, // terrain effect middle radius
-						vokha, // entity that it's around
-						61f, // visual band start
-						200f, // visual band end
-						new Color(130, 60, 150, 130), // base color
-						2f, // probability to spawn aurora sequence, checked once/day when no aurora in progress
+				new MagneticFieldTerrainPlugin.MagneticFieldParams(150f,
+						320,
+						vokha,
+						61f,
+						200f,
+						new Color(130, 60, 150, 130),
+						2f,
 						new Color(130, 60, 150, 130),
 						new Color(150, 30, 120, 150),
 						new Color(10, 190, 200, 190),
@@ -112,123 +144,235 @@ public class tll_system implements SectorGeneratorPlugin {
 						new Color(100, 200, 200, 240)));
 		field2.setCircularOrbit(pyyhrus, 0, 0, 75);
 
+		// Create market for Vokha
+		MarketAPI vokhaMarket = Global.getFactory().createMarket("tll_vokha", vokha.getName(), 5);
+		vokhaMarket.setFactionId("tll");
+		vokhaMarket.setPrimaryEntity(vokha);
+		vokhaMarket.setSurveyLevel(MarketAPI.SurveyLevel.FULL);
+		vokhaMarket.getTariff().modifyFlat("generator", 0.3f);
 
+		// Add conditions
+		vokhaMarket.setPlanetConditionMarketOnly(false);
+		vokhaMarket.addCondition(Conditions.POPULATION_5);
+		vokhaMarket.addCondition(Conditions.THIN_ATMOSPHERE);
+		vokhaMarket.addCondition(Conditions.HOT);
+		vokhaMarket.addCondition(Conditions.DARK);
+		vokhaMarket.addCondition(Conditions.RUINS_SCATTERED);
+		vokhaMarket.addCondition(Conditions.RARE_ORE_SPARSE);
+		vokhaMarket.addCondition(Conditions.ORE_MODERATE);
+
+		// Add industries
+		vokhaMarket.addIndustry(Industries.POPULATION);
+		vokhaMarket.addIndustry(Industries.REFINING);
+		vokhaMarket.addIndustry(Industries.HEAVYINDUSTRY);
+		vokhaMarket.addIndustry(Industries.MINING);
+		vokhaMarket.addIndustry(Industries.SPACEPORT);
+
+		// Add submarkets
+		vokhaMarket.addSubmarket(Submarkets.SUBMARKET_OPEN);
+		vokhaMarket.addSubmarket(Submarkets.GENERIC_MILITARY);
+		vokhaMarket.addSubmarket(Submarkets.SUBMARKET_BLACK);
+		vokhaMarket.addSubmarket(Submarkets.SUBMARKET_STORAGE);
+
+		vokha.setMarket(vokhaMarket);
+		Global.getSector().getEconomy().addMarket(vokhaMarket, true);
+
+		// Warning Beacon
 		SectorEntityToken anchor = system.getHyperspaceAnchor();
-		CustomCampaignEntityAPI beacon = Global.getSector().getHyperspace().addCustomEntity("tll_warning_beacon", "TLL Warning Beacon", "warning_beacon", TLL_factions.TELLASIAN_LEAGUE);
+		CustomCampaignEntityAPI beacon = Global.getSector().getHyperspace().addCustomEntity("tll_warning_beacon",
+				"TLL Warning Beacon", "warning_beacon", TLL_factions.TELLASIAN_LEAGUE);
 		beacon.setCircularOrbitPointingDown(anchor, 100, 300, 65f);
-		Color glowColor = new Color(250,55,0,255);
-		Color pingColor = new Color(250,55,0,255);
-		Misc.setWarningBeaconColors(beacon, glowColor, pingColor);
-		beacon.getMemoryWithoutUpdate().set("$tll_beacontag", true);
 		beacon.setCustomDescriptionId("tll_warningbeacon");
+		Misc.setWarningBeaconColors(beacon, new Color(250,55,0,255), new Color(250,55,0,255));
+		beacon.getMemoryWithoutUpdate().set("$tll_beacontag", true);
 		beacon.getMemoryWithoutUpdate().set("$tll_warningbeacontag", true);
-		Misc.setDefenderOverride(
-				beacon,//Code name foir the entity
-				new DefenderDataOverride("tll", //code name for the faction doing the defender
-						0.5f, //Probibility there will be defenders
-						40, // Minimum fleet points for the defenders
-						60 // Maxmimum fleet points for the defenders
-				));
+		Misc.setDefenderOverride(beacon, new DefenderDataOverride("tll", 0.5f, 40, 60));
 
-		//SuperDerelictSeededFleetManager(
-		//		SectorEntityToken manufacturingcenter, // Where the thing is spawning from
-		//float thresholdLY, //How far away your fleet is from this thing before it starts spawning things (to save on CPU)
-		//int minFleets, //(The minimum number o ffleets to spawn)
-		//int maxFleets 10,//(The maximum number o ffleets to spawn)
-		//float respawnDelay, //(How long it takes for a fleet to spawn in days up to max fleets)
-		//int minPts, //(How small the fleet can be)
-		//int maxPts) //(How large the fleet can be)
-		
-		//Or, written in this form:
-		//system.addScript(new SuperDerelictSeededFleetManager(entity, thresholdLY, minFleets, maxFleets, respawnDelay, minPts, maxPts));
-		//For example:
-		
-		
-
+		// Relay and Buoy
 		SectorEntityToken VigilRelay = system.addCustomEntity(null, "Comm Relay", "comm_relay", "tll");
 		VigilRelay.setCircularOrbit(alphard, 190, 7000, 280);
 
-		SectorEntityToken VigilBuoy = system.addCustomEntity(null, "Nav Buoy", "nav_buoy", "tll"); // Makeshift nav buoy at L5 of Orguk
+		SectorEntityToken VigilBuoy = system.addCustomEntity(null, "Nav Buoy", "nav_buoy", "tll");
 		VigilBuoy.setCircularOrbit(alphard, 310, 7000, 280);
 
+		// Brigid (Barren planet with colony)
 		PlanetAPI brigid = system.addPlanet("tll_brigid", alphard, "Brigid", "barren-bombarded", 50, 80, 3800, 90);
 		brigid.setCustomDescriptionId("tll_brigid");
-		brigid.getMarket().addCondition(Conditions.NO_ATMOSPHERE);
-		brigid.getMarket().addCondition(Conditions.HIGH_GRAVITY);
-		brigid.getMarket().addCondition(Conditions.COLD);
-		brigid.getMarket().addCondition(Conditions.RARE_ORE_RICH);
-		brigid.getMarket().addCondition(Conditions.ORE_RICH);
-		brigid.getMarket().addCondition(Conditions.POPULATION_4);
-		brigid.getMarket().getMemoryWithoutUpdate().set(NOT_RANDOM_MISSION_TARGET, true);
+		brigid.setFaction("tll");
+		brigid.getMemoryWithoutUpdate().set(NOT_RANDOM_MISSION_TARGET, true);
 		brigid.getMemoryWithoutUpdate().set("$tll_brigidtag", true);
-		Misc.setDefenderOverride(
-				brigid,//Code name foir the entity
-				new DefenderDataOverride("tll", //code name for the faction doing the defender
-						1f, //Probibility there will be defenders
-						150, // Minimum fleet points for the defenders
-						300 // Maxmimum fleet points for the defenders
-				));
 
+		// Prevent random admin from being assigned
+		brigid.getMemoryWithoutUpdate().set("$no_automatic_admin", true);
 
+		Misc.setDefenderOverride(brigid, new DefenderDataOverride("tll", 1f, 150, 300));
+
+		// Create market for Brigid
+		MarketAPI brigidMarket = Global.getFactory().createMarket("tll_brigid", brigid.getName(), 4);
+		brigidMarket.setFactionId("tll");
+		brigidMarket.setPrimaryEntity(brigid);
+		brigidMarket.setSurveyLevel(MarketAPI.SurveyLevel.FULL);
+		brigidMarket.getTariff().modifyFlat("generator", 0.3f);
+
+		// Add conditions
+		brigidMarket.setPlanetConditionMarketOnly(false);
+		brigidMarket.addCondition(Conditions.POPULATION_4);
+		brigidMarket.addCondition(Conditions.NO_ATMOSPHERE);
+		brigidMarket.addCondition(Conditions.HIGH_GRAVITY);
+		brigidMarket.addCondition(Conditions.COLD);
+		brigidMarket.addCondition(Conditions.RARE_ORE_RICH);
+		brigidMarket.addCondition(Conditions.ORE_RICH);
+
+		// Add industries
+		brigidMarket.addIndustry(Industries.POPULATION);
+		brigidMarket.addIndustry(Industries.MINING);
+		brigidMarket.addIndustry(Industries.REFINING);
+		brigidMarket.addIndustry(Industries.SPACEPORT);
+
+		// Add submarkets
+		brigidMarket.addSubmarket(Submarkets.SUBMARKET_OPEN);
+		brigidMarket.addSubmarket(Submarkets.GENERIC_MILITARY);
+		brigidMarket.addSubmarket(Submarkets.SUBMARKET_BLACK);
+		brigidMarket.addSubmarket(Submarkets.SUBMARKET_STORAGE);
+
+		brigid.setMarket(brigidMarket);
+		Global.getSector().getEconomy().addMarket(brigidMarket, true);
+
+		// Tellas (Main colony)
 		PlanetAPI habplanet = system.addPlanet("tll_tellas", alphard, "Tellas", "terran", 50, 75, 5900, 90);
 		habplanet.setCustomDescriptionId("tll_tellas");
-		habplanet.getMarket().addCondition(Conditions.HABITABLE);
-		habplanet.getMarket().addCondition(Conditions.FARMLAND_BOUNTIFUL);
-		habplanet.getMarket().addCondition(Conditions.ORE_SPARSE);
-		habplanet.getMarket().addCondition(Conditions.MILD_CLIMATE);
-		habplanet.getMarket().addCondition(Conditions.SOLAR_ARRAY);
-		habplanet.getMarket().addCondition(Conditions.POPULATION_7);
-		habplanet.getMarket().getMemoryWithoutUpdate().set(NOT_RANDOM_MISSION_TARGET, true);
+		habplanet.setFaction("tll");
+		habplanet.getMemoryWithoutUpdate().set(NOT_RANDOM_MISSION_TARGET, true);
 		habplanet.getMemoryWithoutUpdate().set("$tll_tellastag", true);
-		Misc.setDefenderOverride(
-				habplanet,//Code name foir the entity
-				new DefenderDataOverride("tll", //code name for the faction doing the defender
-						1f, //Probibility there will be defenders
-						150, // Minimum fleet points for the defenders
-						300 // Maxmimum fleet points for the defenders
-				));
+
+		// Prevent random admin from being assigned
+		habplanet.getMemoryWithoutUpdate().set("$no_automatic_admin", true);
+
+		// Stellar Mirrors
+		SectorEntityToken tellas_mirror1 = system.addCustomEntity("tellas_mirror1", "Tellas Stellar Mirror",
+				"stellar_mirror", "tll");
+		tellas_mirror1.setCircularOrbitPointingDown(habplanet, 0, 220, 40);
+		tellas_mirror1.setCustomDescriptionId("stellar_mirror");
+
+		SectorEntityToken tellas_mirror2 = system.addCustomEntity("tellas_mirror2", "Tellas Stellar Mirror",
+				"stellar_mirror", "tll");
+		tellas_mirror2.setCircularOrbitPointingDown(habplanet, 120, 220, 40);
+		tellas_mirror2.setCustomDescriptionId("stellar_mirror");
+
+		SectorEntityToken tellas_mirror3 = system.addCustomEntity("tellas_mirror3", "Tellas Stellar Mirror",
+				"stellar_mirror", "tll");
+		tellas_mirror3.setCircularOrbitPointingDown(habplanet, 240, 220, 40);
+		tellas_mirror3.setCustomDescriptionId("stellar_mirror");
+
+		// Market for Tellas
+		MarketAPI tellasMarket = Global.getFactory().createMarket("tll_tellas", habplanet.getName(), 7);
+		tellasMarket.setFactionId("tll");
+		tellasMarket.setPrimaryEntity(habplanet);
+		tellasMarket.setSurveyLevel(MarketAPI.SurveyLevel.FULL);
+		tellasMarket.getTariff().modifyFlat("generator", 0.3f);
+
+		// Add conditions
+		tellasMarket.setPlanetConditionMarketOnly(false);
+		tellasMarket.addCondition(Conditions.POPULATION_7);
+		tellasMarket.addCondition(Conditions.MILD_CLIMATE);
+		tellasMarket.addCondition(Conditions.HABITABLE);
+		tellasMarket.addCondition(Conditions.ORE_SPARSE);
+		tellasMarket.addCondition(Conditions.SOLAR_ARRAY);
+		tellasMarket.addCondition(Conditions.FARMLAND_BOUNTIFUL);
+
+		// Add industries
+		tellasMarket.addIndustry(Industries.POPULATION);
+		tellasMarket.addIndustry(Industries.FARMING);
+		tellasMarket.addIndustry(Industries.LIGHTINDUSTRY);
+		tellasMarket.addIndustry(Industries.WAYSTATION);
+		tellasMarket.addIndustry(Industries.COMMERCE);
+		tellasMarket.addIndustry(Industries.STARFORTRESS_HIGH);
+		tellasMarket.addIndustry(Industries.HIGHCOMMAND);
+		tellasMarket.addIndustry(Industries.MEGAPORT);
+
+		tellasMarket.getIndustry(Industries.FARMING).setAICoreId(Commodities.ALPHA_CORE);
+		tellasMarket.getIndustry(Industries.HIGHCOMMAND).setAICoreId(Commodities.ALPHA_CORE);
+		tellasMarket.getIndustry(Industries.LIGHTINDUSTRY).setAICoreId(Commodities.BETA_CORE);
+		tellasMarket.getIndustry(Industries.STARFORTRESS_HIGH).setAICoreId(Commodities.ALPHA_CORE);
+		tellasMarket.getIndustry(Industries.WAYSTATION).setAICoreId(Commodities.BETA_CORE);
+		tellasMarket.getIndustry(Industries.MEGAPORT).setAICoreId(Commodities.BETA_CORE);
+		tellasMarket.getIndustry(Industries.COMMERCE).setAICoreId(Commodities.ALPHA_CORE);
 
 
+
+		// Add submarkets
+		tellasMarket.addSubmarket(Submarkets.SUBMARKET_OPEN);
+		tellasMarket.addSubmarket(Submarkets.GENERIC_MILITARY);
+		tellasMarket.addSubmarket(Submarkets.SUBMARKET_BLACK);
+		tellasMarket.addSubmarket(Submarkets.SUBMARKET_STORAGE);
+
+		habplanet.setMarket(tellasMarket);
+		Global.getSector().getEconomy().addMarket(tellasMarket, true);
+
+		// Nisse (Cryovolcanic with colony)
 		PlanetAPI nisse = system.addPlanet("tll_nisse", alphard, "Nisse", "cryovolcanic", 50, 50, 14000, 450);
 		nisse.setCustomDescriptionId("tll_nisse");
-		nisse.getMarket().addCondition(Conditions.EXTREME_WEATHER);
-		nisse.getMarket().addCondition(Conditions.VERY_COLD);
-		nisse.getMarket().addCondition(Conditions.RUINS_SCATTERED);
-		nisse.getMarket().addCondition(Conditions.RARE_ORE_SPARSE);
-		nisse.getMarket().addCondition(Conditions.ORE_SPARSE);
-		nisse.getMarket().addCondition(Conditions.TECTONIC_ACTIVITY);
-		nisse.getMarket().addCondition(Conditions.POPULATION_4);
-		nisse.getMarket().getMemoryWithoutUpdate().set(NOT_RANDOM_MISSION_TARGET, true);
+		nisse.setFaction("tll");
+		nisse.getMemoryWithoutUpdate().set(NOT_RANDOM_MISSION_TARGET, true);
 		nisse.getMemoryWithoutUpdate().set("$tll_nissetag", true);
-		Misc.setDefenderOverride(
-				nisse,//Code name foir the entity
-				new DefenderDataOverride("tll", //code name for the faction doing the defender
-						1f, //Probibility there will be defenders
-						150, // Minimum fleet points for the defenders
-						300 // Maxmimum fleet points for the defenders
-				));
 
+		// Prevent random admin from being assigned
+		nisse.getMemoryWithoutUpdate().set("$no_automatic_admin", true);
 
-		SectorEntityToken deadgate = system.addCustomEntity(
-				"tll_deadgate",
-				"Inactive Gate",
-				"inactive_gate",
-				"neutral");
+		Misc.setDefenderOverride(nisse, new DefenderDataOverride("tll", 1f, 150, 300));
+
+		// Create market for Nisse
+		MarketAPI nisseMarket = Global.getFactory().createMarket("tll_nisse", nisse.getName(), 4);
+		nisseMarket.setFactionId("tll");
+		nisseMarket.setPrimaryEntity(nisse);
+		nisseMarket.setSurveyLevel(MarketAPI.SurveyLevel.FULL);
+		nisseMarket.getTariff().modifyFlat("generator", 0.3f);
+
+		// Add conditions
+		nisseMarket.setPlanetConditionMarketOnly(false);
+		nisseMarket.addCondition(Conditions.POPULATION_4);
+		nisseMarket.addCondition(Conditions.VERY_COLD);
+		nisseMarket.addCondition(Conditions.THIN_ATMOSPHERE);
+		nisseMarket.addCondition(Conditions.VOLATILES_DIFFUSE);
+		nisseMarket.addCondition(Conditions.TECTONIC_ACTIVITY);
+		nisseMarket.addCondition(Conditions.RARE_ORE_SPARSE);
+		nisseMarket.addCondition(Conditions.RUINS_SCATTERED);
+
+		// Add industries
+		nisseMarket.addIndustry(Industries.POPULATION);
+		nisseMarket.addIndustry(Industries.SPACEPORT);
+		nisseMarket.addIndustry(Industries.MINING);
+		nisseMarket.addIndustry(Industries.REFINING);
+
+		// Add submarkets
+		nisseMarket.addSubmarket(Submarkets.SUBMARKET_OPEN);
+		nisseMarket.addSubmarket(Submarkets.GENERIC_MILITARY);
+		nisseMarket.addSubmarket(Submarkets.SUBMARKET_BLACK);
+		nisseMarket.addSubmarket(Submarkets.SUBMARKET_STORAGE);
+
+		nisse.setMarket(nisseMarket);
+		Global.getSector().getEconomy().addMarket(nisseMarket, true);
+
+		// Inactive Gate
+		SectorEntityToken deadgate = system.addCustomEntity("tll_deadgate", "Inactive Gate",
+				"inactive_gate", "neutral");
 		deadgate.setCircularOrbitPointingDown(alphard, 270, 4900, 175);
-		deadgate.setCustomDescriptionId("tll_deadgate");
 		deadgate.setInteractionImage("illustrations", "dead_gate");
 		deadgate.getMemoryWithoutUpdate().set("$tll_deadgatetag", true);
 
-		//Jump points
+		// Generate jump points
 		system.autogenerateHyperspaceJumpPoints(true, true, true);
+	}
 
+	void cleanup(StarSystemAPI system) {
+		HyperspaceTerrainPlugin plugin = (HyperspaceTerrainPlugin) Misc.getHyperspaceTerrain().getPlugin();
+		NebulaEditor editor = new NebulaEditor(plugin);
+		float minRadius = plugin.getTileSize() * 2f;
+		float radius = system.getMaxRadiusInHyperspace();
+		editor.clearArc(system.getLocation().x, system.getLocation().y, 0, radius + minRadius * 0.5f, 0, 360f);
+		editor.clearArc(system.getLocation().x, system.getLocation().y, 0, radius + minRadius, 0, 360f, 0.25f);
 	}
 }
-
-
-
-
-
 
 
 

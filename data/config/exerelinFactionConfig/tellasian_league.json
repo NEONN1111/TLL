@@ -1,0 +1,72 @@
+{
+    "playableFaction":true,
+    "corvusCompatible":false,
+    
+    "rebelFleetSuffix":"Desserters",
+    
+    "marketSpawnWeight":2,
+
+    "startRelationships":{ "tritachyon": -0.3, "persean":0.5, "player":-0.2, "hegemony":-0.4},
+    "maxRelationships":{},
+    "diplomacyPositiveChance":{ "persean":1.5 },
+    "diplomacyNegativeChance":{ "persean":0.5 },
+    "dispositions":{
+        "sindrian_diktat": -10,
+    },
+    
+    "alignments":{
+        "technocratic":1,
+        "hierarchical":-0.5,
+        "militarist":1,
+        "diplomatic":0.5,
+        "ideological":-0.5,
+    },
+    "diplomacyTraits":["helps_allies", "stalwart", "selfrighteous", "likes_ai", "anarchist"],
+    
+    # chance of the faction being picked to send a colony expedition. Default 0 (disabled)
+    "colonyExpeditionChance":1,	# baseline expansion behaviour
+    "colonyTargetValuator":"exerelin.campaign.colony.IndustrialColonyTargetValuator",
+    
+    "groundBattleSettings":{
+        "moraleDamageTakenMult":0.4,
+    },
+    
+    "specialForcesNamerClass":"exerelin.campaign.intel.specialforces.namer.PlanetNamer",
+    #"specialForcesFlagshipVariants":{ "paragon_Elite":1, "astral_Strike":0.5 },
+    
+    "startShipsSolo":[
+	  ["tll_lumen_standard"],
+	  ["tll_wolf_standard"]
+	],
+    "startShipsCombatSmall":[
+      ["tll_sunder_standard", "tll_brawler_standard", "tll_wolf_standard"],
+      ["tll_fulgent_standard", "tll_shade_standard", "tll_wolf_standard"]
+    ],
+    "startShipsTradeSmall":[["tll_buffalo_standard", "tll_berserker_standard", "tll_lumen_standard"]],
+    "startShipsCombatLarge":[
+      ["tll_falcon_standard", "tll_fulgent_standard", "tll_wolf_standard"],
+      ["tll_dominator_standard", "tll_medusa_standard", "tll_shade_standard"]
+    ],
+    "startShipsTradeLarge":[["tll_rampart_standard", "tll_buffalo_standard", "tll_lumen_standard"]],
+    "startShipsExplorerLarge":[["venture_Balanced", "tll_shade_standard", "shepherd_Frontier"]],
+    "startShipsCarrierSmall":[["tll_drover_standard", "tll_lumen_standard", "tll_wolf_standard"]],
+    "startShipsCarrierLarge":[["tll_heron_standard", "tll_medusa_standard", "tll_lumen_standard"]],
+    "startShipsGrandFleet":[["tll_onslaught_standard"]],
+	
+	"startShipsSuper":[
+    ["tll_champion_auto_standard"], ["tll_elucidation_standard"], ["tll_anubis_standard"], ["tll_nova_standard"]
+	],
+    
+    "startSpecialItems":[
+        [["tll_base_bp", ""]],
+    ],
+    
+    "defenceStations":[
+    ],
+    
+    "industrySeeds":[
+    ],
+    
+    "bonusSeeds":[
+    ],
+}

@@ -1,0 +1,31 @@
+{
+
+      "tll_vosta_ring":{
+        "defaultName":"Orbital Ring", # used if name=null in addCustomEntity()
+        "nameInText":"You shouldn't be seeing this!",
+        "aOrAn":"an",
+        "defaultRadius":1, # used if radius<0 in addCustomEntity()
+        "interactionImage":"graphics/illustrations/city_from_above.jpg",
+        "icon":"graphics/icons/gate0.png",
+        "iconWidth":0,
+        "iconHeight":0,
+        "sprite":"graphics/planets/vostaring.png",
+        "spriteWidth":400,
+        "spriteHeight":400,
+        "renderShadow":true,
+        "useLightColor":true,
+        "showInCampaign":true,
+        "showIconOnMap":true,
+        "showNameOnMap":true,
+        "scaleNameWithZoom":false,
+        "scaleIconWithZoom":true,
+        "nameColor":[70,200,255,255],
+        "nameShadowColor":[0,0,0,255],
+        "renderCircleIndicator":true,
+        "renderCircleIndicatorSelectionFlash":true,
+        "customDescriptionId":"vosta_ring",
+        "tags":["non_clickable", "neutrino"],
+        "layers":[TERRAIN_3], # what layer(s) to render in. See CampaignEngineLayers.java for possible values
+        "pluginClass":"neon.tll.data.plugins.VostaRing",
+    },
+}
