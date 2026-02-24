@@ -4,3 +4,4 @@ AI Switch,tll_aiswitch,,,,"no_drop, codex_unlockable",,,,,,8,15,25,40,neon.tll.d
 Manual Mode,tll_aiswitch_manual,,,,"no_drop, restricted, codex_unlockable",,,,TRUE,,0,0,0,0,neon.tll.data.hullmods.tll_aiswitch_manual,Currently in Manual mode.,,,
 Auto Mode,tll_aiswitch_auto,,,,"no_drop, restricted, codex_unlockable",,,,TRUE,,0,0,0,0,neon.tll.data.hullmods.tll_aiswitch_auto,Currently in Automated mode.,,,
 Tellasian League Refit,tll_refit,,,,"no_drop, no_sell, restricted",,,,TRUE,,0,0,0,0,neon.tll.data.hullmods.TLL_Refit,,"Reduces missile and ballistic weapon range, and flux dissipation / capacity.",,graphics/hullmods/tll_refit.png
+TLL System Reinforcements,tll_ccbonus,,,Tellasian League,,,,,TRUE,,0,0,0,0,neon.tll.data.hullmods.TLL_ccbonus,"Tellasian pattern modifications result in slight increases to both Peak Performance Time, and a reduction in CR Degradation.",,,graphics/hullmods/tll_refit.png
