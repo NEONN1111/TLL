@@ -51,10 +51,10 @@
     "startShipsExplorerLarge":[["venture_Balanced", "tll_shade_standard", "shepherd_Frontier"]],
     "startShipsCarrierSmall":[["tll_drover_standard", "tll_lumen_standard", "tll_wolf_standard"]],
     "startShipsCarrierLarge":[["tll_heron_standard", "tll_medusa_standard", "tll_lumen_standard"]],
-    "startShipsGrandFleet":[["tll_onslaught_standard"]],
+    "startShipsGrandFleet":[["tll_onslaught_standard", "lasher_Standard"]],
 	
 	"startShipsSuper":[
-    ["tll_champion_auto_standard"], ["tll_elucidation_standard"], ["tll_anubis_standard"], ["tll_nova_standard"]
+    ["tll_champion_auto_standard", "lasher_Standard"], ["tll_elucidation_standard", "lasher_Standard"], ["tll_anubis_standard", "lasher_Standard"], ["tll_nova_standard", "lasher_Standard"]
 	],
     
     "startSpecialItems":[
