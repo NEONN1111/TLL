@@ -31,6 +31,28 @@ public class tll_aiswitch_auto extends BaseHullMod {
                 .setHighlight("level " + nerflevel, "level " + (nerflevel + 1));
     }
 
+
+    public void addCodexDescription(TooltipMakerAPI tooltip) {
+        tooltip.addPara("Due to certain liberties taken when integrating the AI core cradle into the new hull the result is less than optimal - it lacks the throughput required to support AI cores of higher sentience.", 0f);
+        tooltip.addSpacer(10f);
+        tooltip.addPara("Any AI core installed is limited to level " + nerflevel + ", up to level " + (nerflevel + 1) + " if fully integrated.", 0f);
+    }
+
+
+    public String getCodexIcon() {
+        return Global.getSettings().getSpriteName("hullmods", "tll_refit");
+    }
+
+
+    public String getCodexTitle() {
+        return "Auto Mode";
+    }
+
+
+    public String getContentId() {
+        return "tll_aiswitch_auto";
+    }
+
     @Override
     public int getDisplayCategoryIndex() {
         return 0;
@@ -67,7 +89,7 @@ public class tll_aiswitch_auto extends BaseHullMod {
             int skillsToRemove = level - nerflevel;
 
             List<MutableCharacterStatsAPI.SkillLevelAPI> skillsCopy = cap.getStats().getSkillsCopy();
-            if (skillsCopy.isEmpty()) return; // don't crash the game
+            if (skillsCopy.isEmpty()) return;
 
             while (numAttempts < 100 && skillsRemoved < skillsToRemove) {
                 numAttempts += 1;
@@ -87,7 +109,6 @@ public class tll_aiswitch_auto extends BaseHullMod {
                     skillsRemoved += 1;
                     cap.getStats().setLevel(cap.getStats().getLevel() - 1);
 
-                    // Refresh the skills copy after removal
                     skillsCopy = cap.getStats().getSkillsCopy();
                     if (skillsCopy.isEmpty()) break;
                 }

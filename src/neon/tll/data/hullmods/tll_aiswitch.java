@@ -10,6 +10,7 @@ import com.fs.starfarer.api.impl.campaign.ids.HullMods;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.loading.WeaponSlotAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
+import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import neon.tll.data.scripts.util.tll_ReflectionUtilsT;
@@ -66,15 +67,36 @@ public class tll_aiswitch extends BaseHullMod {
         tooltip.addPara("Can only switch states if the ship doesn't already have a captain.", 5f);
 
         if (!this.isBuiltIn(ship) && !this.isSMod(ship)) {
-            TooltipMakerAPI para = (TooltipMakerAPI) tooltip.addPara("Only functions once built in to the vessel. Does not refund its ordnance post cost after being built in if the ship was originally automated.", 5f);
-            ((com.fs.starfarer.api.ui.LabelAPI) para).setHighlightColor(Misc.getNegativeHighlightColor());
+            LabelAPI label = tooltip.addPara("Only functions once built in to the vessel. Does not refund its ordnance post cost after being built in if the ship was originally automated.", 5f);
+            label.setHighlightColor(Misc.getNegativeHighlightColor());
         }
+    }
+
+    public void addCodexDescription(TooltipMakerAPI tooltip) {
+        tooltip.addPara("Allows for normally automated ships to be piloted with a modest crew complement, and removes their reliance on a commander proficient in handling them.", 0f);
+        tooltip.addSpacer(10f);
+        tooltip.addPara("Can switch between allowing a human captain or an AI core captain.", 0f);
+        tooltip.addSpacer(10f);
+        tooltip.addPara("Can only switch states if the ship doesn't already have a captain.", 0f);
+        tooltip.addSpacer(10f);
+        tooltip.addPara("Only functions once built in to the vessel. Does not refund its ordnance post cost after being built in if the ship was originally automated.", 0f);
+    }
+
+    public String getCodexIcon() {
+        return Global.getSettings().getSpriteName("icons", "markets/rogue_ai");
+    }
+
+    public String getCodexTitle() {
+        return "AI Switch";
+    }
+
+    public String getContentId() {
+        return "tll_aiswitch";
     }
 
     @Override
     public void applyEffectsAfterShipCreation(ShipAPI ship, String id) {
         if(ship.getOriginalOwner()<0){
-            //undo fix for weapons put in cargo
             if(
                     Global.getSector()!=null &&
                             Global.getSector().getPlayerFleet()!=null &&
@@ -106,7 +128,7 @@ public class tll_aiswitch extends BaseHullMod {
         if (spec == null) return false;
 
         if (spec.hasTag(Tags.AUTOMATED) && !spec.isBuiltInMod(HullMods.AUTOMATED)) {
-            return false; // causes issues w/ custom auto hullmods
+            return false;
         }
 
         return super.isApplicableToShip(ship);
@@ -132,14 +154,11 @@ public class tll_aiswitch extends BaseHullMod {
         ShipVariantAPI variant = stats.getVariant();
         if (variant == null) return;
 
-        // Apply decorative weapon only when in automated mode (has tll_aiswitch_auto)
         applyDecorativeWeaponBasedOnMode(ship, stats, variant);
 
         if (!this.isBuiltIn(ship) && !this.isSMod(ship)) return;
 
         if (spec.isBuiltInMod(HullMods.AUTOMATED) || spec.hasTag(Tags.AUTOMATED)) {
-            // todo fix issue where this isn't called on game load and auto ships are serialized as their original specs,
-            // causing them to lose CR until you open the fleet menu or just do anything that causes them to update
             ShipHullSpecAPI cloned = null;
             try {
                 cloned = (ShipHullSpecAPI) tll_ReflectionUtilsT.invoke("clone", ship.getHullSpec());
@@ -188,13 +207,10 @@ public class tll_aiswitch extends BaseHullMod {
     private void applyDecorativeWeaponBasedOnMode(ShipAPI ship, MutableShipStatsAPI stats, ShipVariantAPI variant) {
         String hullId = stats.getVariant().getHullSpec().getHullId();
 
-        // Only proceed if this hull has a decorative weapon mapping
         if (!decoMap.containsKey(hullId)) return;
 
-        // Check if ship is in automated mode (has tll_aiswitch_auto)
         boolean isAutomatedMode = variant.hasHullMod(tll_AISWITCHAUTOMATED);
 
-        // Find decorative slot
         WeaponSlotAPI decorativeSlot = null;
         Iterator weaponiter = ship.getHullSpec().getAllWeaponSlotsCopy().iterator();
         while (weaponiter.hasNext()) {
@@ -210,17 +226,13 @@ public class tll_aiswitch extends BaseHullMod {
         String slotId = decorativeSlot.getId();
 
         if (isAutomatedMode) {
-            // In automated mode: add the corebridge decorative weapon
             String weaponId = decoMap.get(hullId);
             WeaponSpecAPI weaponSpec = Global.getSettings().getWeaponSpec(weaponId);
             if (weaponSpec != null) {
-                // Clear the slot first (set to empty string), then add the decorative weapon
                 variant.clearSlot(slotId);
                 variant.addWeapon(slotId, weaponId);
             }
         } else {
-            // In manual mode: clear any weapon in the decorative slot
-            // Check if current weapon is a corebridge weapon
             String currentWeaponId = variant.getWeaponId(slotId);
             if (currentWeaponId != null && currentWeaponId.endsWith("_corebridge")) {
                 variant.clearSlot(slotId);
@@ -242,7 +254,6 @@ public class tll_aiswitch extends BaseHullMod {
                         robot.keyPress(KeyEvent.VK_R);
                         robot.keyRelease(KeyEvent.VK_R);
                     } catch (AWTException e) {
-                        // Handle exception if needed
                     }
                 }
             }
@@ -259,7 +270,6 @@ public class tll_aiswitch extends BaseHullMod {
                         robot.keyPress(KeyEvent.VK_R);
                         robot.keyRelease(KeyEvent.VK_R);
                     } catch (AWTException e) {
-                        // Handle exception if needed
                     }
                 }
             }

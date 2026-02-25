@@ -1,23 +1,25 @@
 package neon.tll.data.hullmods;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignUIAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.combat.BaseHullMod;
 import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 
+
 public class tll_aiswitch_manual extends BaseHullMod {
-    
+
     @Override
     public int getDisplayCategoryIndex() {
         return 0;
     }
-    
+
     @Override
     public int getDisplaySortOrder() {
         return 1;
     }
-    
+
     @Override
     public boolean canBeAddedOrRemovedNow(
             ShipAPI ship,
@@ -26,7 +28,7 @@ public class tll_aiswitch_manual extends BaseHullMod {
     ) {
         return (ship != null && (ship.getCaptain() == null || ship.getCaptain().isDefault()));
     }
-    
+
     @Override
     public String getCanNotBeInstalledNowReason(
             ShipAPI ship,
@@ -35,7 +37,7 @@ public class tll_aiswitch_manual extends BaseHullMod {
     ) {
         return "Must not have a captain assigned to remove.";
     }
-    
+
     @Override
     public void addPostDescriptionSection(
             TooltipMakerAPI tooltip,
@@ -44,6 +46,23 @@ public class tll_aiswitch_manual extends BaseHullMod {
             float width,
             boolean isForModSpec
     ) {
-        // Empty implementation - no description needed
+    }
+
+
+    public void addCodexDescription(TooltipMakerAPI tooltip) {
+        tooltip.addPara("Currently in Manual mode.", 0f);
+    }
+
+    public String getCodexIcon() {
+        return Global.getSettings().getSpriteName("hullmods", "tll_refit");
+    }
+
+
+    public String getCodexTitle() {
+        return "Manual Mode";
+    }
+
+    public String getContentId() {
+        return "tll_aiswitch_manual";
     }
 }
