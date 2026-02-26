@@ -5,7 +5,7 @@
 	"displayNameWithArticle":"the Tellasian League",
 	"logo":"graphics/factions/tll_flag.png",
 	"crest":"graphics/factions/tll_crest.png",
-	"shipNamePrefix":"TLL",
+	"shipNamePrefix":"TDF",
 	"shipNameSources":{
 		"BRITISH_NAVY":1,
 		"ROMAN":2,

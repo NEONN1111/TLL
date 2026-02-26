@@ -1,0 +1,141 @@
+id,trigger,conditions,script,text,options,notes
+relLevelCooperativeTLL,RelationshipLevelDesc,"$faction.rel == COOPERATIVE
+$faction.id == tll",,"Providence themselves have extended a personal thanks for your contributions to the Tellasian League. Its senate has even floated the idea of awarding you the Star Republica, its highest civilian honor, though that's still locked in subcommittee. Until then, you are still considered a valued ally of the League, and have free reign of its territory.",,
+relLevelFriendlyTLL,RelationshipLevelDesc,"$faction.rel == FRIENDLY
+$faction.id == tll",,"The Tellasian League considers you a friend. You have ingratiated yourself with most of its officials, and many Tellasian captains know you by name. Several of them have outright floated the idea you apply for Tellasian citizenship, and offer their good word to see it accepted.",,
+relLevelWelcomingTLL,RelationshipLevelDesc,"$faction.rel == WELCOMING
+$faction.id == tll",,"You are something of a pleasant surprise to the Tellasian officials; a genuinely helpful outside spacer. Officials treat you politely, fairly, and may even forgive minor transgressions against the sovereignty of Tellas. Maybe.",,
+relLevelFavorableTLL,RelationshipLevelDesc,"$faction.rel == FAVORABLE
+$faction.id == tll",,"Though you're not quite fully trusted, Tellasian intel has marked you as an actor of little concern. You are, probably, not planning at all hours to return Tellas and all her sister worlds to slavery. For this, you have earned some small measure of respect.",,
+relLevelNeutralTLL,RelationshipLevelDesc,"$faction.rel == NEUTRAL
+$faction.id == tll",,The Tellasian League wants little to do with you either way; its default attitude towards most outsiders.,,
+relLevelSuspiciousTLL,RelationshipLevelDesc,"$faction.rel == SUSPICIOUS
+$faction.id == tll",,"Word has spread both by mouth and by memo that you are a habitual troublemaker, and the authorities have become cross enough with you to label you as ""Bandit Violet"". Though not quite considered an outright criminal, you will find little hospitality in Tellasian space.",,
+relLevelInhospitableTLL,RelationshipLevelDesc,"$faction.rel == INHOSPITABLE
+$faction.id == tll",,"Your existence offers a valuable lesson to the Tellasian League for why it chooses to isolate itself in the first place. Any ship registered under your name is autoflagged for investigation, and ambitious Tellasian officials see your potential arrest as a prime accelerant for their careers.",,
+relLevelHostileTLL,RelationshipLevelDesc,"$faction.rel == HOSTILE
+$faction.id == tll",,"In the eyes of Tellas, you are no different than a jumped-up pirate and, even worse, a likely stooge of the Hegemony. Interactions with Tellasian forces will be kinetic.",,
+relLevelVengefulTLL,RelationshipLevelDesc,"$faction.rel == VENGEFUL
+$faction.id == tll",,"It is an open secret that a cabal of Tellasian AIs have now made it their personal project to see you dead. You have been classified as ""Bandit Crimson"": the highest level of threat to the Tellasian League. The Tellasian navy has been given direct orders to actively hunt your fleet, and even cooperate with other factions if it means your destruction.",,
+,,,,,,
+#TLL greetings,,,,,,
+greetingTLLFriendly,OpenCommLink,"$faction.id == tll
+$faction.friendlyToPlayer","$menuState = fleetConvMain 0
+FireAll PopulateOptions","""Clear."" Their brows raise, and a small smile quirks their lips. ""Oh! Should've know it was you, $PlayerName. Burn bright.""
+OR
+""$shipOrFleet clears. Good to see ya."" They move to cut the feed, but stop themselves. ""Oh, and if you're ever on Tellas, drinks are on me.""
+OR
+""Cleared and good day. How are you, $PlayerName?""
+OR
+The Tellasian $PersonRank smiles. ""I recognize that $shipOrFleet anywhere. Burn bright, $PlayerName.""
+OR
+""The free people of the Tellasian League greet you, $PlayerName.""
+OR
+""Attention spacer, your $shipOrFleet has been designated as..."" They lean over to their console, and their brow shoots up. ""Oh. Don't see that one often."" 
+
+They look up and give you a friendly salute.
+OR
+""You're clear, $PlayerName.""
+OR
+""I heard you were flying around here, $PlayerName. Good to see you.""
+OR
+The $personRank speaks without prompting. ""Some friendly advice: if you're going to Vokha, bring more guards. Bunch of miners from Pyyrhus just rotated out, and they only ever go one place.""
+OR
+""$ShipOrFleet clears,"" the captain states. Before you cut the commink, they offer a quick salute.",,
+greetingTLLHostileWeaker,OpenCommLink,"$faction.id == tll
+$entity.isHostile
+$entity.relativeStrength < 0",$entity.ignorePlayerCommRequests = true 1,"Your screen shows a Tellasian $personRank talking to an unseen third party.
+
+""Bandit Crimson! I repeat: Bandit Crimson!"" 
+
+They turn to the screen with a scowl, and the comm link goes dead.
+OR
+The Tellasian $personRank doesn't acknowledge you at all, too busy barking orders to their bridge crew.
+OR
+$PersonRank $personName inhales deeply, then exhales. ""We will not bend to pirates, tyrants, or slavers. We will not bend to you.""
+OR
+""Hostile $shipOrFleet, cease aggressive posture and we'll do likewise.""
+OR
+""Cavalry's on the way. If I were you, I'd start burning.""
+OR
+""Your $shipOrFleet has been tagged as hostile belligerent by the Tellasian Defense Force. Keep your distance, or be met with overwhelming force.""
+OR
+""Attention enemy $shipOrFleet: TDF battle protocol calls for rapid and overwhelming concentration of force once the enemy is engaged. We won't be alone for long.""
+OR
+""Bandit Crimson engaged! Alert High Command!""
+OR
+""Your flagship will make a nice museum.""
+OR
+The $personRank appears resolute. 
+
+""Here we go.""",cutCommLink:Cut the comm link,
+greetingTLLHostileWeakerDefiant,OpenCommLink,"$faction.id == tll
+$entity.isHostile
+$entity.relativeStrength < 0
+$entity.weakerThanPlayerButHolding",$entity.ignorePlayerCommRequests = true 1,"The Tellasian $personRank stares you down from their seat. ""We've faced worse odds.""
+OR
+The Tellasian $personRank is sipping from a teacup, their face bleak but determined. They say nothing, and the link goes dead.
+OR
+""Before you do anything stupid, I want you to know Tellas has looooong memory."" They swallow. ""And a longer reach.""
+OR
+""Even if you win, it won't matter.""
+OR
+The $personRank is grinning, with a bead of sweat rolling down their cheek. Their voice is uneven. ""You know what? I'm feeling lucky today.""
+OR
+""I am a proud $personRank of the Tellasian Defense Force. Let me show you why.""
+OR
+$PersonRank $PersonName inhales deeply, then exhales. ""We will not bend to pirates, tyrants, or slavers. We will not bend to you.""
+OR
+The captain remains slumped in their chair. ""Nobody's winning this. We'll make sure of that.""
+OR
+The enemy commander is not in a talkative mood. You receive only static.
+OR
+You are greeted with a picture of of the Tellasian flag; a last gesture of patriotic defiance.
+OR
+The commlink is answered, but the captain barely acknowledges you. They are typing orders, nervously humming the Tellasian anthem as their boot taps along upon the floor bulkhead.",cutCommLink:Cut the comm link,
+greetingTLLHostileStronger,OpenCommLink,"$faction.id == tll
+$entity.isHostile
+$entity.relativeStrength >= 0",$entity.ignorePlayerCommRequests = true 1,"""You are under arrest for crimes against the free people of the Tellasian League. Power down your weapons. Now.""
+OR
+""To preserve the sovereignty and freedom of the Tellasian League and her people, I have been authorized to engage your $shipOrFleet with lethal force unless you surrender immediately. You have sixty seconds. Fifty-nine. Fifty-eight. Fifty-""
+OR
+The $personRank is grinning ear-to-ear. ""Oh, you're going to look good on my report.""
+OR
+""Got you.""
+OR
+""Well, this day just got a lot more interesting.""
+OR
+The captain's arms are crossed. ""Stand down now, or find out what happens to the enemy of free people.""
+OR
+""Outside aggressor, you have been tagged as Bandit Crimson."" They break into a sardonic laugh. ""Good luck!""
+OR
+Your commlink shows only static.
+OR
+The $PersonRank glares at the readouts on their Tri-Pad. ""This is what all the fuss is about?""
+OR
+""I'll see to it any survivors of your $shipOrFleet are treated with dignity. You, however, will not be one of them.""",cutCommLink:Cut the comm link,
+greetingTLLNeutral,OpenCommLink,"$faction.id == tll
+$faction.neutralToPlayer","$menuState = fleetConvMain 0
+FireAll PopulateOptions","""$ShipOrFleet clears. Stay outta trouble.""
+OR
+""$ShipOrFleet clears."" The captain's brows raise. ""Yes? Please don't tell me you're lost.""
+OR
+""$ShipOrFleet, please hold for ID."" They squint at their Tri-Pad. ""No, wait. That's someone else. You're clear.""
+OR
+The Tellasian $personRank is glancing at their Tri-Pad in one hand and drinking a fresh cup of tea in the other. They wave your fleet through with a wordless gesture.
+OR
+""Clear. Please direct all communication inquiries with First Citizen Providence at Tellas, thank you.'
+OR
+""$ShipOrFleet clears. Maintain reasonable distance, please.""
+OR
+""Tellasian Defense Force tags your ship as-"" They glance to their console. ""-Clear. Let's keep it that way, huh?""
+OR
+""Headed to Tellas?"" the $personRank asks.
+OR
+""Attention $shipOrFleet, this flotilla operates under the aegis of the Tellasian Defense Force. Please do not interfere with TDF operations."" They stare at you for moment, then lean towards the feed. ""That you means you, stranger.""
+OR
+""Clear. The Tellasian Defense Force would like to remind independent vessels and fleets that the TDF is not responsible for the defense of independent and foreign ships beyond Alphard and Alaugon. Thank you.""",,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,

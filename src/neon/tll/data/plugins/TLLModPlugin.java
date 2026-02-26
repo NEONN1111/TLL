@@ -86,5 +86,5 @@ public class TLLModPlugin extends BaseModPlugin {
     public void onAboutToStartGeneratingCodex() {
         // This runs before codex generation
     }
-    
+
 }
