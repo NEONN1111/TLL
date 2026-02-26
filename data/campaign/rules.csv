@@ -23,7 +23,7 @@ greetingTLLFriendly,OpenCommLink,"$faction.id == tll
 $faction.friendlyToPlayer","$menuState = fleetConvMain 0
 FireAll PopulateOptions","""Clear."" Their brows raise, and a small smile quirks their lips. ""Oh! Should've know it was you, $PlayerName. Burn bright.""
 OR
-""$shipOrFleet clears. Good to see ya."" They move to cut the feed, but stop themselves. ""Oh, and if you're ever on Tellas, drinks are on me.""
+""$ShipOrFleet clears. Good to see ya."" They move to cut the feed, but stop themselves. ""Oh, and if you're ever on Tellas, drinks are on me.""
 OR
 ""Cleared and good day. How are you, $PlayerName?""
 OR
@@ -132,7 +132,7 @@ OR
 OR
 ""Headed to Tellas?"" the $personRank asks.
 OR
-""Attention $shipOrFleet, this flotilla operates under the aegis of the Tellasian Defense Force. Please do not interfere with TDF operations."" They stare at you for moment, then lean towards the feed. ""That you means you, stranger.""
+""Attention $shipOrFleet, this flotilla operates under the aegis of the Tellasian Defense Force. Please do not interfere with TDF operations."" They stare at you for moment, then lean towards the feed. ""That means you, stranger.""
 OR
 ""Clear. The Tellasian Defense Force would like to remind independent vessels and fleets that the TDF is not responsible for the defense of independent and foreign ships beyond Alphard and Alaugon. Thank you.""",,
 ,,,,,,
