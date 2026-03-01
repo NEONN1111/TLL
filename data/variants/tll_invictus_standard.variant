@@ -1,0 +1,62 @@
+{
+  "variantId": "tll_invictus_standard",
+  "hullId": "tll_invictus",
+  "displayName": "Standard",
+  "goalVariant": true,
+  "fluxCapacitors": 0,
+  "fluxVents": 26,
+  "quality": 1,
+  "permaMods": [],
+  "hullMods": [
+    "fluxbreakers",
+    "reinforcedhull",
+    "insulatedengine",
+    "magazines"
+  ],
+  "weaponGroups": [
+    {
+      "autofire": false,
+      "mode": "LINKED",
+      "weapons": {
+        "WS 001": "autopulse",
+        "WS 010": "autopulse"
+      }
+    },
+    {
+      "autofire": false,
+      "mode": "ALTERNATING",
+      "weapons": {
+        "WS 002": "multineedler",
+        "WS 009": "multineedler"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "WS 000": "devastator",
+        "WS 004": "cyclone",
+        "WS 007": "cyclone",
+        "WS 026": "devastator"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "WS 005": "devastator",
+        "WS 006": "devastator"
+      }
+    },
+    {
+      "autofire": true,
+      "mode": "LINKED",
+      "weapons": {
+        "WS 003": "guardian",
+        "WS 008": "guardian"
+      }
+    }
+  ],
+  "modules": [],
+  "wings": []
+}
