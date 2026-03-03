@@ -67,7 +67,7 @@
       "size": "LARGE",
       "type": "COMPOSITE",
       "mount": "HARDPOINT",
-      "arc": 5,
+      "arc": 15,
       "angle": 0,
       "locations": [175, 127]
     },
@@ -94,7 +94,7 @@
       "size": "LARGE",
       "type": "COMPOSITE",
       "mount": "HARDPOINT",
-      "arc": 5,
+      "arc": 15,
       "angle": 0,
       "locations": [175, -127]
     },
