@@ -6,6 +6,10 @@ import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.RepLevel;
 import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
+import com.fs.starfarer.api.impl.campaign.intel.events.HostileActivityEventIntel;
+import neon.tll.data.scripts.campaign.TLL_EconListenerScript;
+import neon.tll.data.scripts.campaign.intel.TLL_HostileActivityFactor;
+import neon.tll.data.scripts.campaign.intel.TLL_HostileActivityFactorCause;
 import neon.tll.data.scripts.tll_gen;
 import neon.tll.data.scripts.tll_gen2;
 import neon.tll.data.scripts.tll_people;
@@ -24,6 +28,7 @@ public class TLLModPlugin extends BaseModPlugin {
     @Override
     public void onNewGameAfterEconomyLoad() {
         new tll_people().createTLLPeople();
+        Global.getSector().getListenerManager().addListener(new TLL_EconListenerScript());
     }
 
     @Override
@@ -85,6 +90,13 @@ public class TLLModPlugin extends BaseModPlugin {
     @Override
     public void onAboutToStartGeneratingCodex() {
         // This runs before codex generation
+    }
+
+    public static void addTLLColonyCrisis(){
+        HostileActivityEventIntel intel = HostileActivityEventIntel.get();
+        if (intel != null && intel.getActivityCause(TLL_HostileActivityFactor.class, TLL_HostileActivityFactorCause.class) == null) {
+            intel.addActivity(new TLL_HostileActivityFactor(intel), new TLL_HostileActivityFactorCause(intel));
+        }
     }
 
 }

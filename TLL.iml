@@ -7,14 +7,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="LazyLib" level="project" />
-    <orderEntry type="library" name="Graphics" level="project" />
-    <orderEntry type="library" name="LunaLib" level="project" />
-    <orderEntry type="library" name="ExerelinCore" level="project" />
-    <orderEntry type="library" name="MagicLib" level="project" />
-    <orderEntry type="library" name="commons-compiler-jdk" level="project" />
-    <orderEntry type="library" name="starfarer" level="project" />
-    <orderEntry type="library" name="SecondInCommand1" level="project" />
-    <orderEntry type="library" name="LunaLib1" level="project" />
+    <orderEntry type="library" exported="" name="ExerelinCore" level="application" />
+    <orderEntry type="library" exported="" name="LazyLib" level="application" />
+    <orderEntry type="library" exported="" name="LunaLib" level="application" />
+    <orderEntry type="library" exported="" name="MagicLib" level="application" />
+    <orderEntry type="library" exported="" name="starsector-core" level="application" />
+    <orderEntry type="library" exported="" name="GraphicsLib" level="project" />
   </component>
 </module>
