@@ -24,6 +24,7 @@ public class TLLModPlugin extends BaseModPlugin {
     @Override
     public void onNewGameAfterEconomyLoad() {
         new tll_people().createTLLPeople();
+        Global.getSector().getListenerManager().addListener(new TLL_EconListenerScript());
     }
 
     @Override
@@ -86,5 +87,12 @@ public class TLLModPlugin extends BaseModPlugin {
     public void onAboutToStartGeneratingCodex() {
         // This runs before codex generation
     }
+    public static void addTLLColonyCrisis(){
+        HostileActivityEventIntel intel = HostileActivityEventIntel.get();
+        if (intel != null && intel.getActivityCause(TLL_HostileActivityFactor.class, TLL_HostileActivityFactorCause.class) == null) {
+            intel.addActivity(new TLL_HostileActivityFactor(intel), new TLL_HostileActivityFactorCause(intel));
+        }
+    }
+
 
 }
