@@ -13,6 +13,5 @@
     <orderEntry type="library" exported="" name="MagicLib" level="application" />
     <orderEntry type="library" exported="" name="starsector-core" level="application" />
     <orderEntry type="library" exported="" name="GraphicsLib" level="project" />
-    <orderEntry type="library" name="fr" level="project" />
   </component>
 </module>
