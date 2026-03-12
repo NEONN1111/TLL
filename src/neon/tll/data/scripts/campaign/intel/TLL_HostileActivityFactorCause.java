@@ -112,14 +112,17 @@ public class TLL_HostileActivityFactorCause extends BaseHostileActivityCause2 {
             for (Industry ind : market.getIndustries()) {
                 String core = ind.getAICoreId();
                 if (Commodities.ALPHA_CORE.equals(core)) {
-                    points = points + 12;
+                    points  += 12;
+                    continue;
                 } else if (Commodities.BETA_CORE.equals(core)) {
-                    points = points + 9;
+                    points  += 9;
+                    continue;
                 } else if (Commodities.GAMMA_CORE.equals(core)) {
-                    points = points + 9;
+                    points += 9;
+                    continue;
                 }
                 if (market.getAdmin().isAICore()) {
-                    points = points + 15;
+                    points += 15;
                 }
             }
         }
