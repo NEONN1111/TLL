@@ -101,7 +101,7 @@
     {
       "id": "WS 009",
       "size": "SMALL",
-      "type": "MISSILE",
+      "type": "SYNERGY",
       "mount": "HARDPOINT",
       "arc": 4,
       "angle": 0,
@@ -110,7 +110,7 @@
     {
       "id": "WS 010",
       "size": "SMALL",
-      "type": "MISSILE",
+      "type": "SYNERGY",
       "mount": "HARDPOINT",
       "arc": 4,
       "angle": 0,
